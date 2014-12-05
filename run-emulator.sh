@@ -24,8 +24,7 @@ sysdir="out/target/product/generic"
 disk_system="$sysdir/system.img"
 disk_userdata="$sysdir/userdata.img"
 disk_cache="$sysdir/cache.img"
-disk_sdcard="$sysdir/sdcard.img"
-disks="$disk_system $disk_userdata $disk_cache $disk_sdcard"
+disks="$disk_system $disk_userdata $disk_cache"
 
 snapshot="pristine"
 
@@ -149,10 +148,6 @@ info_disks() {
 #
 # Main
 #
-if [ ! -e "$disk_sdcard" ]; then
-    echo "No sdcard.img, run build-emulator-sdcard.sh first!" >&2
-    exit 1
-fi
 
 if ! which qemu-img >/dev/null ; then
     echo "Please install qemu-utils" >&2
@@ -195,10 +190,8 @@ exec emulator -memory 512 \
     -data "$disk_userdata" \
     -cache "$disk_cache" \
     -sdcard "$disk_sdcard" \
-    -kernel "$sysdir/ubuntu/kernel/vmlinuz" \
+    -kernel "prebuilts/qemu-kernel/arm/kernel-qemu-armv7" \
     -force-32bit \
     -shell -no-jni -show-kernel -verbose \
     -no-snapstorage \
-    -gpu on -qemu -cpu cortex-a9 \
-    -append 'apparmor=0'
-
+    -gpu on  -qemu -cpu cortex-a9
