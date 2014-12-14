@@ -181,6 +181,11 @@ elif [ -n "$1" ]; then
     exit 1
 fi
 
+kernel="prebuilts/qemu-kernel/arm/kernel-qemu-armv7"
+if [ -e "hybris/prebuilts/qemu-kernel/arm/kernel-qemu-armv7" ]; then
+    kernel="hybris/$kernel"
+fi
+
 # Note: -no-snapstorage disables all qemu snapshotting functionality, which is
 # different than the 'qemu-img snapshot' disk commands, above
 exec emulator -memory 512 \
@@ -190,7 +195,7 @@ exec emulator -memory 512 \
     -data "$disk_userdata" \
     -cache "$disk_cache" \
     -sdcard "$disk_sdcard" \
-    -kernel "prebuilts/qemu-kernel/arm/kernel-qemu-armv7" \
+    -kernel "$kernel" \
     -force-32bit \
     -shell -no-jni -show-kernel -verbose \
     -no-snapstorage \
